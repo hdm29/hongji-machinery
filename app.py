@@ -42,7 +42,6 @@ def init_db():
     
     conn.commit()
     conn.close()
-    print("Database Initialized Successfully")
 
 # --- WEB ROUTES ---
 
@@ -58,11 +57,9 @@ def inventory():
     cursor = conn.cursor()
     
     if query:
-        # Search functionality for names or categories
         cursor.execute("SELECT * FROM machinery WHERE name LIKE ? OR category LIKE ?", 
                        ('%'+query+'%', '%'+query+'%'))
     else:
-        # Default view sorted by parent category
         cursor.execute('SELECT * FROM machinery ORDER BY parent_cat DESC, category ASC')
         
     items = cursor.fetchall()
@@ -75,10 +72,9 @@ def contact():
 
 @app.route('/download-catalog')
 def download_catalog():
-    # Make sure your PDF is named 'catalog.pdf' inside the static folder
     return send_from_directory('static', 'catalog.pdf', as_attachment=True)
 
 if __name__ == '__main__':
     init_db()
-    # Port 5000 is standard for Flask/Render
-    app.run(debug=True, port=int(os.environ.get("PORT", 5000)), host='0.0.0.0')
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
