@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request
 
 app = Flask(__name__)
 
@@ -29,9 +29,7 @@ def init_db():
                     full_path = os.path.join(root, file)
                     relative_path = os.path.relpath(full_path, static_dir)
                     
-                    # Category is the folder name (e.g., Jaw Crusher)
                     category = os.path.basename(root)
-                    # Parent is the folder above (e.g., crushers)
                     parent_path = os.path.dirname(root)
                     parent_cat = os.path.basename(parent_path) if parent_path != static_dir else "General"
 
@@ -44,9 +42,9 @@ def init_db():
     
     conn.commit()
     conn.close()
-    print("Scan complete. Database updated.")
+    print("Database Initialized Successfully")
 
-# --- ROUTES ---
+# --- WEB ROUTES ---
 
 @app.route('/')
 def index():
@@ -54,40 +52,33 @@ def index():
 
 @app.route('/inventory')
 def inventory():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    # Sort: Crushers first, then specific types
-    cursor.execute('SELECT * FROM machinery ORDER BY parent_cat DESC, category ASC')
-    items = cursor.fetchall()
-    conn.close()
-    return render_template('inventory.html', machinery=items)
-
-@app.route('/download-catalog')
-def download_catalog():
-    # Make sure your file is renamed to 'catalog.pdf' in the static folder
-    return send_from_directory('static', 'catalog.pdf', as_attachment=True)
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-if __name__ == '__main__':
-    init_db()
-    app.run(debug=True, port=5000)
-    @app.route('/inventory')
-def inventory():
-    from flask import request
     query = request.args.get('search')
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     
     if query:
-        # Search by name or category
+        # Search functionality for names or categories
         cursor.execute("SELECT * FROM machinery WHERE name LIKE ? OR category LIKE ?", 
                        ('%'+query+'%', '%'+query+'%'))
     else:
+        # Default view sorted by parent category
         cursor.execute('SELECT * FROM machinery ORDER BY parent_cat DESC, category ASC')
         
     items = cursor.fetchall()
     conn.close()
     return render_template('inventory.html', machinery=items)
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/download-catalog')
+def download_catalog():
+    # Make sure your PDF is named 'catalog.pdf' inside the static folder
+    return send_from_directory('static', 'catalog.pdf', as_attachment=True)
+
+if __name__ == '__main__':
+    init_db()
+    # Port 5000 is standard for Flask/Render
+    app.run(debug=True, port=int(os.environ.get("PORT", 5000)), host='0.0.0.0')
