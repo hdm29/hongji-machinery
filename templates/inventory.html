@@ -1,0 +1,39 @@
+<form action="/inventory" method="GET" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search for Jaw Crusher, Ball Mill...">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-5 text-center fw-bold">Hongji Equipment Inventory</h2>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for item in machinery %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <img src="{{ url_for('static', filename=item.image_path) }}" 
+                     class="card-img-top rounded-top-3" 
+                     alt="{{ item.name }}"
+                     style="height: 220px; object-fit: cover;">
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge rounded-pill bg-primary px-3">{{ item.category }}</span>
+                        <small class="text-muted">{{ item.parent_cat }}</small>
+                    </div>
+                    <h5 class="card-title h6 fw-bold">{{ item.name }}</h5>
+                </div>
+                <div class="card-footer bg-transparent border-0 pb-3">
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-outline-dark btn-sm">Request Specifications</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
