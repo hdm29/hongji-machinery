@@ -17,10 +17,8 @@ def init_db():
             image_path TEXT
         )
     ''')
-
     static_dir = os.path.join(app.root_path, 'static')
     valid_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
-
     if os.path.exists(static_dir):
         for root, dirs, files in os.walk(static_dir):
             for file in files:
@@ -49,8 +47,7 @@ def inventory():
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     if query:
-        cursor.execute("SELECT * FROM machinery WHERE name LIKE ? OR category LIKE ?", 
-                       ('%'+query+'%', '%'+query+'%'))
+        cursor.execute("SELECT * FROM machinery WHERE name LIKE ? OR category LIKE ?", ('%'+query+'%', '%'+query+'%'))
     else:
         cursor.execute('SELECT * FROM machinery ORDER BY parent_cat DESC, category ASC')
     items = cursor.fetchall()
