@@ -58,7 +58,7 @@ def inventory():
     
     if query:
         cursor.execute("SELECT * FROM machinery WHERE name LIKE ? OR category LIKE ?", 
-                       ('%'+query+'%', '%'+query+'%'))
+                       ('%' + query + '%', '%' + query + '%'))
     else:
         cursor.execute('SELECT * FROM machinery ORDER BY parent_cat DESC, category ASC')
         
