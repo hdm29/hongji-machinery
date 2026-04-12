@@ -4,7 +4,6 @@ from flask import Flask, render_template, send_from_directory, request
 
 app = Flask(__name__)
 
-# --- DATABASE SETUP ---
 def init_db():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -28,22 +27,16 @@ def init_db():
                 if file.lower().endswith(valid_extensions):
                     full_path = os.path.join(root, file)
                     relative_path = os.path.relpath(full_path, static_dir)
-                    
                     category = os.path.basename(root)
                     parent_path = os.path.dirname(root)
                     parent_cat = os.path.basename(parent_path) if parent_path != static_dir else "General"
-
                     display_name = os.path.splitext(file)[0].replace('_', ' ').replace('-', ' ').title()
-
                     cursor.execute(
                         'INSERT INTO machinery (name, category, parent_cat, image_path) VALUES (?, ?, ?, ?)',
                         (display_name, category, parent_cat, relative_path)
                     )
-    
     conn.commit()
     conn.close()
-
-# --- WEB ROUTES ---
 
 @app.route('/')
 def index():
@@ -55,13 +48,11 @@ def inventory():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    
     if query:
         cursor.execute("SELECT * FROM machinery WHERE name LIKE ? OR category LIKE ?", 
-                       ('%' + query + '%', '%' + query + '%'))
+                       ('%'+query+'%', '%'+query+'%'))
     else:
         cursor.execute('SELECT * FROM machinery ORDER BY parent_cat DESC, category ASC')
-        
     items = cursor.fetchall()
     conn.close()
     return render_template('inventory.html', machinery=items)
