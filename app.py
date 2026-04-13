@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from flask import Flask, render_template, send_from_directory, request
+from flask import send_from_directory, current_app
 
 app = Flask(__name__)
 
@@ -84,9 +85,15 @@ def contact():
 
 @app.route('/download-catalog')
 def download_catalog():
-    # Make sure catalog.pdf exists in your /static folder
-    return send_from_directory('static', 'catalog.pdf', as_attachment=True)
-
+    # This creates a path starting from the app's root directory
+    static_path = os.path.join(current_app.root_path, 'static')
+    
+    # Check if the file actually exists before trying to send it
+    file_path = os.path.join(static_path, 'catalog.pdf')
+    if not os.path.exists(file_path):
+        return f"Error: File not found at {file_path}", 404
+        
+    return send_from_directory(static_path, 'catalog.pdf', as_attachment=True)
 # Run initialization BEFORE the app starts
 init_db()
 
