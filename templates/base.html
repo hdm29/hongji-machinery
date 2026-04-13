@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hongji Machinery</title>
@@ -10,18 +11,44 @@
         .footer { background: #1a252f; color: white; padding: 20px 0; margin-top: 50px; }
         .card-img-top { height: 200px; object-fit: cover; }
     </style>
-</head>
+</head><title>Hongji Machinery | Premium Industrial Solutions</title>
+<meta name="description" content="Expert supplier of 50tpd gold processing plants, ball mills, and crushers. Quality machinery for global mining operations.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hongji-machinery.onrender.com/">
+<meta property="og:title" content="Hongji Machinery - Quality Industrial Equipment">
+<meta property="og:description" content="Browse our full catalog of mineral processing machinery.">
+<meta property="og:image" content="{{ url_for('static', filename='logo.png') }}">
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="/">HONGJI MACHINERY</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/inventory">Inventory</a>
-                <a class="nav-link" href="/contact">Contact</a>
-            </div>
-        </div>
-    </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">HONGJI MACHINERY</a>
+    
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/inventory">Inventory</a></li>
+        <li class="nav-item"><a class="nav-link" href="/download-catalog">Download Catalog</a></li>
+      </ul>
+
+      <form class="d-flex" action="/inventory" method="GET">
+        <input class="form-control me-2" type="search" name="q" 
+               placeholder="Search machinery..." list="machinery-options">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+        
+        <datalist id="machinery-options">
+          <option value="Ball Mill">
+          <option value="Jaw Crusher">
+          <option value="Gold Processing Plant">
+          <option value="Magnetic Separator">
+        </datalist>
+      </form>
+      
+      <div id="google_translate_element" class="ms-3"></div>
+    </div>
+  </div>
+</nav>
 
     {% block content %}{% endblock %}
 
@@ -43,5 +70,33 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+<a href="https://wa.me/YOUR_PHONE_NUMBER" class="whatsapp-button" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+</a>
+
+<style>
+.whatsapp-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Opposite side of the Live Chat */
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+.whatsapp-button img {
+    width: 35px;
+    margin-top: 12px;
+}
+</style>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
